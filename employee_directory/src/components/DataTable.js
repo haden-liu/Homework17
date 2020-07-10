@@ -1,43 +1,40 @@
-import React, { useContext } from "react";
-import DataBody from "./DataBody";
-import "../styles/DataTable.css";
-import DataAreaContext from "../utils/DataAreaContext";
+import React from 'react';
 
-const DataTable = () => {
-  const context = useContext(DataAreaContext);
+function Table(props) {
+    let filterdData = props.data.filter(employee => employee.first_name.toLowerCase().indexOf( props.search.toLowerCase() ) === 1)
 
-  return (
 
-    <div className="datatable mt-5">
-      <table
-        id="table"
-        className="table table-striped table-hover table-condensed"
-      >
-        <thead>
-          <tr>
-            {context.developerState.headings.map(({ name, width }) => {
-              return (
-                <th
-                  className="col"
-                  key={name}
-                  style={{ width }}
-                  onClick={() => {
-                    // context.handleSort(name.toLowerCase());
-                    context.handleSort(name);
-                  }}
-                >
-                  {name}
-                  <span className="pointer"></span>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
+    if (props.search === "") {
+        filterdData = props.data;
+    } 
 
-        <DataBody />
-      </table>
-    </div>
-  );
+    return (
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col" onClick={props.handleIdSorting}># &#9650;</th>
+                <th scope="col">First</th>
+                <th scope="col" onClick={props.handleLastnameSorting}>Last &#9650;</th>
+                <th scope="col">Email</th>
+                <th scope="col">Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                {filterdData.map(employee => {
+                    return (
+                        <tr>
+                            <th scope="row">{employee.id}</th>
+                            <td>{employee.first_name}</td>
+                            <td>{employee.last_name}</td>
+                            <td>{employee.email}</td>
+                            <td>{employee.gender}</td>
+                        </tr>
+                    )
+                })}
+                
+            </tbody>
+        </table>
+    )
 }
 
-export default DataTable;
+export default Table;
